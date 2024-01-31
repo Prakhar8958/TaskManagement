@@ -1,6 +1,6 @@
 package com.example.Tasks.Service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import com.example.Tasks.Entity.Task;
 import com.example.Tasks.Entity.User;
@@ -11,7 +11,7 @@ public interface TaskService {
 	
 	public Task getTaskById(int id);
 	
-	public List<Task> getTaskByUser(User user);
+	public Page<Task> getTaskByUser(User user,int pageNo);
 	
 	public Task updateTask(Task task);
 	

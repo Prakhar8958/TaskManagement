@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.Tasks.Entity.Task;
 import com.example.Tasks.Entity.User;
@@ -51,13 +52,18 @@ public class UserController {
 		return "add_tasks";
 	}
 	@GetMapping("/viewTasks")
-	public String viewTasks(Model m,Principal p) {
+	public String viewTasks(Model m,Principal p,@RequestParam(defaultValue="0") Integer pageNo) {
 		User user=getUser(p,m);
-		List<Task> tasks=taskservice.getTaskByUser(user);
+		Page<Task> tasks=taskservice.getTaskByUser(user,pageNo);
+		/*
 		Sort sort=Sort.by("date").descending();
 		Pageable pageable=PageRequest.of(0, 2,sort);
 		Page<Task> page=taskrepo.findAll(pageable);
-		
+		*/
+		m.addAttribute("currentPage", pageNo);
+		m.addAttribute("totalPages",tasks.getTotalPages());
+		m.addAttribute("totalElements",tasks.getTotalElements());
+		m.addAttribute("taskList",tasks.getContent());
 		m.addAttribute("tasks", tasks);
 		return "view_tasks";
 	}
